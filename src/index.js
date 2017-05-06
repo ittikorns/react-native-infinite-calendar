@@ -38,6 +38,7 @@ export default class Calendar extends Component {
 
     this.updateYears(props);
 
+    this._shouldItemUpdate = this._shouldItemUpdate.bind(this);
     this.state = {
       isScrolling: false,
       selectedDate: this.parseSelectedDate(props.selectedDate)
@@ -139,6 +140,15 @@ export default class Calendar extends Component {
       />
     );
   };
+
+  _shouldItemUpdate(prev, next) {
+    if (this.state.isScrolling) { 
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   render() {
     const {rowHeight} = this.props;
     const {isScrolling, selectedDate} = this.state;
@@ -150,14 +160,12 @@ export default class Calendar extends Component {
           ref={instance => {
             this._list = instance;
           }}
+          renderItem={this._getComponent}
           contentContainerStyle={{width: 7 * rowHeight}}
           data={this.months}
           ItemComponent={this._getComponent}
           getItemLayout={this.getItemLayout}
-          shouldItemUpdate={({parentProps}, {parentProps: nextParentProps}) => (
-            parentProps.isScrolling !== nextParentProps.isScrolling ||
-            parentProps.selectedDate !== nextParentProps.selectedDate
-          )}
+          shouldItemUpdate={this._shouldItemUpdate}
           keyExtractor={({year, month}) => `${year}:${month}`}
           initialNumToRender={3}
           windowSize={3}

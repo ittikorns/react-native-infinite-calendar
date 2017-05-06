@@ -20,7 +20,7 @@ export default class Month extends PureComponent {
   }
   render() {
     const {item, rowHeight, onSelect, selectedDate} = this.props;
-    let {year, month, layout} = item;
+    let {year, month, layout} = this.props.item.item;
     let {rows, date} = getMonth(year, month);
     let monthRows = [];
     let day = 0;
